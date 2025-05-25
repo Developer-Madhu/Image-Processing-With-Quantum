@@ -34,26 +34,25 @@ def save_side_by_side_images(original_img, negated_img, output_path):
     draw.text((width + 30, 10), "Negated", fill=(0, 0, 0), font=font)
 
     combined.save(output_path)
-    print(f"[\u2714] Side-by-side image saved: {output_path}")
+    print(f"[✔] Side-by-side image saved: {output_path}")
 
-# --- Grayscale quantum image negation ---
+# --- Quantum grayscale image negation ---
 def negate_grayscale_image_quantum(image_path):
-    img = Image.open(image_path)
+    img = Image.open(image_path).convert("L")
     width, height = img.size
-
-    img = img.convert("L")
     matrix = [[img.getpixel((c, r)) for c in range(width)] for r in range(height)]
     intensity_bits = 8
     negated_img = Image.new("L", (width, height))
 
+    first_pixel_circuit = None
+
     for r in range(height):
         for c in range(width):
             value = matrix[r][c]
-            total_bits = intensity_bits
-            qr = QuantumRegister(total_bits, "q")
-            cr = ClassicalRegister(total_bits, "c")
+            qr = QuantumRegister(intensity_bits, "q")
+            cr = ClassicalRegister(intensity_bits, "c")
             qc = QuantumCircuit(qr, cr)
-            negate_pixel(value, total_bits, qc, qr, cr)
+            negate_pixel(value, intensity_bits, qc, qr, cr)
 
             backend = AerSimulator()
             job = backend.run(qc, shots=1)
@@ -64,12 +63,22 @@ def negate_grayscale_image_quantum(image_path):
             val = int(bitstring, 2)
             negated_img.putpixel((c, r), val)
 
-    return img, negated_img
+            if first_pixel_circuit is None:
+                first_pixel_circuit = qc
+
+    return img, negated_img, first_pixel_circuit
 
 # --- Execution ---
 if __name__ == "__main__":
-    grayscale_path = "lena_grey.jpeg"
+    image_path = "lena_grey.jpeg"  # Path to your grayscale image
+
     print("\nProcessing Grayscale Image...")
-    orig_img, neg_img = negate_grayscale_image_quantum(grayscale_path)
+    original_img, negated_img, circuit = negate_grayscale_image_quantum(image_path)
+
+    # Save result side-by-side
     save_path = "grayscale_quantum_negated_side_by_side.png"
-    save_side_by_side_images(orig_img, neg_img, save_path)
+    save_side_by_side_images(original_img, negated_img, save_path)
+
+    # Print quantum circuit of the first pixel
+    print("\nQuantum Circuit for First Pixel:")
+    print(circuit.draw(output="text"))
