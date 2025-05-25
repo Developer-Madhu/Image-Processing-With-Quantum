@@ -1,10 +1,15 @@
 from PIL import Image, ImageDraw, ImageFont
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
 from qiskit_aer import AerSimulator
+import numpy as np
 
 # --- Convert int to bits ---
 def int_to_bits(value, num_bits):
     return [int(bit) for bit in bin(value)[2:].zfill(num_bits)]
+
+# --- Classical pixel negation ---
+def classical_negate_pixel(value):
+    return 255 - value
 
 # --- Quantum pixel negation ---
 def negate_pixel(value, bits, qc, qr, cr, offset=0):
@@ -31,7 +36,7 @@ def save_side_by_side_images(original_img, negated_img, output_path):
     draw = ImageDraw.Draw(combined)
     font = ImageFont.load_default()
     draw.text((20, 10), "Original", fill=(0, 0, 0), font=font)
-    draw.text((width + 30, 10), "Negated", fill=(0, 0, 0), font=font)
+    draw.text((width + 30, 10), "Quantum Negated", fill=(0, 0, 0), font=font)
 
     combined.save(output_path)
     print(f"[✔] Side-by-side image saved: {output_path}")
@@ -57,7 +62,7 @@ def matrix_to_image(matrix):
 def quantum_negate_grayscale_matrix(matrix, bits=8):
     height = len(matrix)
     width = len(matrix[0])
-    negated = [[0 for _ in range(width)] for _ in range(height)]
+    quantum_negated = [[0 for _ in range(width)] for _ in range(height)]
     printed_circuits = 0
 
     for r in range(height):
@@ -69,7 +74,7 @@ def quantum_negate_grayscale_matrix(matrix, bits=8):
             negate_pixel(val, bits, qc, qr, cr)
 
             if printed_circuits < 8:
-                print(f"\nQuantum Circuit for pixel ({r},{c}):")
+                print(f"\nQuantum Circuit for pixel ({r},{c}) value {val}:")
                 print(qc.draw(output="text"))
                 printed_circuits += 1
 
@@ -77,9 +82,16 @@ def quantum_negate_grayscale_matrix(matrix, bits=8):
             job = backend.run(qc, shots=1)
             counts = job.result().get_counts()
             bitstring = list(counts.keys())[0]
-            negated[r][c] = int(bitstring, 2)
+            quantum_negated[r][c] = int(bitstring, 2)
 
-    return negated
+    return quantum_negated
+
+# --- Mean Squared Error ---
+def calculate_mse(image1, image2):
+    np1 = np.array(image1, dtype=np.float32)
+    np2 = np.array(image2, dtype=np.float32)
+    mse = np.mean((np1 - np2) ** 2)
+    return mse
 
 # --- Main Execution ---
 if __name__ == "__main__":
@@ -89,9 +101,18 @@ if __name__ == "__main__":
     ascii_matrix = text_file_to_grayscale_matrix(text_file)
     orig_img = matrix_to_image(ascii_matrix)
 
-    print("\nRunning quantum negation on grayscale image...")
-    negated_matrix = quantum_negate_grayscale_matrix(ascii_matrix, bits=8)
-    negated_img = matrix_to_image(negated_matrix)
+    # Classical Negation for MSE comparison
+    classical_negated_matrix = [[classical_negate_pixel(val) for val in row] for row in ascii_matrix]
+    classical_negated_img = matrix_to_image(classical_negated_matrix)
 
+    print("\nRunning quantum negation on grayscale image...")
+    quantum_negated_matrix = quantum_negate_grayscale_matrix(ascii_matrix, bits=8)
+    quantum_negated_img = matrix_to_image(quantum_negated_matrix)
+
+    # Calculate MSE between classical and quantum negated images
+    mse = calculate_mse(classical_negated_img, quantum_negated_img)
+    print(f"\n[✓] MSE between classical and quantum negated images: {mse:.2f}")
+
+    # Save image
     save_path = "text_quantum_negated_side_by_side.png"
-    save_side_by_side_images(orig_img, negated_img, save_path)
+    save_side_by_side_images(orig_img, quantum_negated_img, save_path)
