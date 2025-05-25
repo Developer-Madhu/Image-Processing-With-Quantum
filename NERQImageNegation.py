@@ -34,7 +34,7 @@ def save_side_by_side_images(original_img, negated_img, output_path):
     draw.text((width + 30, 10), "Negated", fill=(0, 0, 0), font=font)
 
     combined.save(output_path)
-    print(f"[✔] Side-by-side image saved: {output_path}")
+    print(f"[\u2714] Side-by-side image saved: {output_path}")
 
 # --- Quantum image negation ---
 def negate_image_quantum(image_path, image_type):
@@ -76,6 +76,11 @@ def negate_image_quantum(image_path, image_type):
                 qc = QuantumCircuit(qr, cr)
                 negate_pixel(value, total_bits, qc, qr, cr)
 
+            # Print circuit only for the first pixel
+            if r == 0 and c == 0:
+                print(f"Quantum Circuit for {image_type} image first pixel ({r}, {c}):")
+                print(qc)
+
             backend = AerSimulator()
             job = backend.run(qc, shots=1)
             result = job.result()
@@ -96,9 +101,9 @@ def negate_image_quantum(image_path, image_type):
 # --- Execution ---
 if __name__ == "__main__":
     image_paths = {
-        "binary": "binaryimage.png", #ensure placing binary image
-        "grayscale": "grey.jpeg", #ensure placing greyscale image
-        "colorful": "lena.jpeg" #ensure placing color image (if possible lena)
+        "binary": "binaryimage.png",
+        "grayscale": "grey.jpeg",
+        "colorful": "lena.jpeg"
     }
 
     for img_type in ["binary", "grayscale", "colorful"]:
@@ -106,3 +111,4 @@ if __name__ == "__main__":
         orig_img, neg_img = negate_image_quantum(image_paths[img_type], img_type)
         save_path = f"{img_type}_quantum_negated_side_by_side.png"
         save_side_by_side_images(orig_img, neg_img, save_path)
+
