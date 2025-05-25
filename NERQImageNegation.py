@@ -96,9 +96,9 @@ def negate_image_quantum(image_path, image_type):
 # --- Execution ---
 if __name__ == "__main__":
     image_paths = {
-        "binary": "binaryimage.png",
-        "grayscale": "grey.jpeg",
-        "colorful": "lena.jpeg"
+        "binary": "binaryimage.png", #ensure placing binary image
+        "grayscale": "grey.jpeg", #ensure placing greyscale image
+        "colorful": "lena.jpeg" #ensure placing color image (if possible lena)
     }
 
     for img_type in ["binary", "grayscale", "colorful"]:
