@@ -1,6 +1,30 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+from qiskit import QuantumCircuit
+
+def pixel_to_quantum_circuit(pixel_rgb):
+    """
+    Convert an RGB pixel to a quantum circuit representation.
+
+    Parameters:
+        pixel_rgb (list of int): RGB values [R, G, B] (0-255)
+
+    Returns:
+        QuantumCircuit: A quantum circuit representing the pixel's RGB.
+    """
+    # Normalize RGB values to range [0, 1]
+    r, g, b = [val / 255.0 for val in pixel_rgb]
+
+    # Create a 3-qubit circuit, one for each color channel
+    qc = QuantumCircuit(3, name=f"RGB {pixel_rgb}")
+
+    # Encode each channel into its qubit using Ry (rotation around Y-axis)
+    qc.ry(r * np.pi, 0)  # R to qubit 0
+    qc.ry(g * np.pi, 1)  # G to qubit 1
+    qc.ry(b * np.pi, 2)  # B to qubit 2
+
+    return qc
 
 def ocqr_negation_color_image(image_path):
     """
@@ -35,6 +59,25 @@ def ocqr_negation_color_image(image_path):
 
     # Convert back to 8-bit
     negated_image = (negated_image * 255).astype(np.uint8)
+
+    # Print circuits for first 5 pixels
+    print("\nFirst 5 pixels transformation (original -> negated):")
+    h, w, _ = image.shape
+    count = 0
+    for i in range(h):
+        for j in range(w):
+            if count >= 5:
+                break
+            original_pixel = image[i, j]
+            negated_pixel = negated_image[i, j]
+            print(f"Pixel ({i},{j}): {original_pixel.tolist()} -> {negated_pixel.tolist()}")
+            print("Quantum circuit for original pixel:")
+            qc = pixel_to_quantum_circuit(original_pixel.tolist())
+            print(qc.draw())
+            count += 1
+        if count >= 5:
+            break
+
     return negated_image
 
 def display_images(original, transformed):
@@ -52,7 +95,7 @@ def display_images(original, transformed):
     plt.show()
 
 if __name__ == "__main__":
-    image_path = "your_image.jpg"  # Replace with your image path
+    image_path = "lena.jpeg"  # Replace with your image path
     original_image = cv2.imread(image_path)
     original_image = cv2.cvtColor(original_image, cv2.COLOR_BGR2RGB)
     negated = ocqr_negation_color_image(image_path)
