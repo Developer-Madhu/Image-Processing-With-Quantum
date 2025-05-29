@@ -1,1 +1,0 @@
-print("Welcome to First Day of Quantum Computing!")
