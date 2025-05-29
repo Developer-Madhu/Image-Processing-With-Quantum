@@ -3,7 +3,7 @@ import time
 from qiskit import QuantumCircuit
 from sklearn.metrics import mean_squared_error
 
-# ----- OCQR Encode using RY gates -----
+#OCQR Function
 def ocqr_gate_encoding(r, g, b, pixel_index):
     # Normalize to [0,1]
     r_norm, g_norm, b_norm = r / 255.0, g / 255.0, b / 255.0
@@ -21,18 +21,18 @@ def ocqr_gate_encoding(r, g, b, pixel_index):
     print(f"\n🧠 OCQR Quantum Circuit using RY gates for Pixel {pixel_index} RGB({r},{g},{b}):")
     print(qc.draw(output='text'))
 
-# ----- Classical OCQR-style Negation -----
+#Classical OCQR-style Negation
 def classical_ocqr_negate_pixel(r, g, b):
     r_norm, g_norm, b_norm = r / 255.0, g / 255.0, b / 255.0
     return int((1 - r_norm) * 255), int((1 - g_norm) * 255), int((1 - b_norm) * 255)
 
-# ----- Classical Full Image Negation -----
+#Classical Full Image Negation
 def classical_negate_image(image):
     normalized = image / 255.0
     negated = 1.0 - normalized
     return (negated * 255).astype(np.uint8)
 
-# ----- MSE -----
+#MSE
 def compute_mse(img1, img2):
     return mean_squared_error(img1.flatten(), img2.flatten())
 
@@ -64,11 +64,10 @@ def main():
     print("\nSimulated Quantum (OCQR) Negated Image:\n", quantum_simulated)
 
     mse = compute_mse(classical_negated, quantum_simulated)
-    print("\nMSE between Classical and OCQR Simulated Image: {:.4f}".format(mse))
+    print("\nImages MSE: {:.4f}".format(mse))
 
     end = time.time()
     print("\nExecution Time: {:.6f} seconds".format(end - start))
 
-# Run
 if __name__ == "__main__":
     main()
