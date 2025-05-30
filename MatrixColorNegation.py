@@ -18,7 +18,7 @@ def ocqr_gate_encoding(r, g, b, pixel_index):
     qc.ry(g_theta, 1)
     qc.ry(b_theta, 2)
 
-    print(f"\n🧠 OCQR Quantum Circuit using RY gates for Pixel {pixel_index} RGB({r},{g},{b}):")
+    print(f"\n OCQR Quantum Circuit using RY gates for Pixel {pixel_index} RGB({r},{g},{b}):")
     print(qc.draw(output='text'))
 
 #Classical OCQR-style Negation
