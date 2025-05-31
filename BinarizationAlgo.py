@@ -1,7 +1,7 @@
 grey_img = [[0,3],[5,2]]
 res_img = []
 
-def processElems(mat1, mat2):
+def processNumElems(mat1, mat2):
     for rows in mat1:
         tempRows = []
         for elems in rows:
@@ -13,8 +13,11 @@ def displayValuesOfMatrix(mat):
         for j in i:
             print(j)
 
+def processBinaryElems():
+    ...
+
 def binarization():
     ...            
 
-processElems(grey_img, res_img)
+processNumElems(grey_img, res_img)
 displayValuesOfMatrix(res_img)
