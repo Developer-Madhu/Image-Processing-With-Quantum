@@ -91,3 +91,21 @@ matrix = [[0, 1, 2],[3, 4, 5],[6, 7, 2]]
 def binaryConversion(n):
     return f'{n:08b}'
 
+def average_to_binary(matrix):
+    total = 0
+    count = 0
+    binary_matrix = []
+
+    for row in matrix:
+        binary_row = []
+        for num in row:
+            binary = binaryConversion(num)
+            binary_row.append(binary)
+            total += num
+            count += 1
+        binary_matrix.append(binary_row)
+
+    average = total // count
+    average_binary = binaryConversion(average)
+
+    return binary_matrix, average, average_binary
