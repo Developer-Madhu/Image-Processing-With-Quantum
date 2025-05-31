@@ -12,7 +12,6 @@ def binarize_image_based_on_avg(img_gray):
     print(f"Max pixel value: {max_val}")
     print(f"Average pixel value: {avg_val}")
 
-    # Binarization logic
     binarized = np.where(img_gray >= avg_val, max_val, min_val).astype(np.uint8)
     return binarized
 
@@ -24,7 +23,7 @@ def show_side_by_side(original, binarized):
     cv2.destroyAllWindows()
 
 def main():
-    
+
     image_path = 'lena_grey.jpeg'  
     img_gray = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
 
