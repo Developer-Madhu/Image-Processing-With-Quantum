@@ -13,5 +13,8 @@ def displayValuesOfMatrix(mat):
         for j in i:
             print(j)
 
+def binarization():
+    ...            
+
 processElems(grey_img, res_img)
 displayValuesOfMatrix(res_img)
