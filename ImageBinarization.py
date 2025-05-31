@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 def binarize_image_based_on_avg(img_gray):
-    # Get min, max, and average pixel values
+    
     min_val = np.min(img_gray)
     max_val = np.max(img_gray)
     avg_val = int(np.mean(img_gray))
@@ -17,14 +17,14 @@ def binarize_image_based_on_avg(img_gray):
     return binarized
 
 def show_side_by_side(original, binarized):
-    # Stack original and binarized images horizontally
+    
     combined = np.hstack((original, binarized))
     cv2.imshow('Original (Left) vs Binarized (Right)', combined)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
 def main():
-    # Load image in grayscale
+    
     image_path = 'lena_grey.jpeg'  
     img_gray = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
 
