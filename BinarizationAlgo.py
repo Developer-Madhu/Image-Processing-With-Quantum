@@ -13,11 +13,19 @@ def displayValuesOfMatrix(mat):
         for j in i:
             print(j)
 
-def processBinaryElems():
-    ...
+def processBinaryElems(mat):
+    firstRow = mat[0]
+    secondRow = mat[1]
+    for i in firstRow:
+        for j in secondRow:
+            e1 = str(i).split()
+            print(e1) 
+    
 
 def binarization():
     ...            
 
 processNumElems(grey_img, res_img)
 displayValuesOfMatrix(res_img)
+print(" ")
+processBinaryElems(res_img)
