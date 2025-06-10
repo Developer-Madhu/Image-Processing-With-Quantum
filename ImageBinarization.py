@@ -1,5 +1,4 @@
-import cv2
-import numpy as np
+import cv2, numpy as np
 
 def binarize_image_based_on_avg(img_gray):
     
@@ -22,17 +21,13 @@ def show_side_by_side(original, binarized):
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-def main():
+if __name__ == "__main__":
 
     image_path = 'lena_grey.jpeg'  
     img_gray = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
 
     if img_gray is None:
         print("Failed to load image. Check the file path.")
-        return
 
     binarized_img = binarize_image_based_on_avg(img_gray)
     show_side_by_side(img_gray, binarized_img)
-
-if __name__ == "__main__":
-    main()
