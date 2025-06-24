@@ -23,7 +23,6 @@ qc_initial.initialize([alpha, beta], 0)
 state_initial = Statevector.from_instruction(qc_initial)
 vec_i, theta_i = get_bloch_vector(state_initial)
 
-
 theta_rotation = np.pi/3  # change degrees in pi
 qc_final = QuantumCircuit(1)
 qc_final.initialize([alpha, beta], 0)
