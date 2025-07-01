@@ -544,7 +544,6 @@ from qiskit import QuantumRegister, ClassicalRegister, QuantumCircuit, transpile
 from qiskit_aer import AerSimulator
 import math
 from numpy import pi
-import cv2  # OpenCV for image display
 from PIL import Image
 import os
 
@@ -755,72 +754,72 @@ def upscale_with_six_methods(img_64x64):
     # Method 1: Nearest Neighbor (simple, no mathematical formula needed)
     try:
         methods['Nearest Neighbor'] = zoom(img_64x64, zoom=scale_factor, order=0).astype(np.uint8)
-        print("✓ Nearest Neighbor interpolation completed")
+        print("Nearest Neighbor interpolation completed")
     except Exception as e:
-        print(f"✗ Nearest Neighbor failed: {e}")
+        print(f"Nearest Neighbor failed: {e}")
     
     # Method 2: Bilinear (following Image 1 formula)
     try:
         methods['Bilinear'] = bilinear_interpolation(img_64x64, scale_factor)
-        print("✓ Bilinear interpolation completed (custom implementation)")
+        print("Bilinear interpolation completed (custom implementation)")
     except Exception as e:
-        print(f"✗ Bilinear failed: {e}")
+        print(f"Bilinear failed: {e}")
         # Fallback to scipy
         try:
             methods['Bilinear'] = zoom(img_64x64, zoom=scale_factor, order=1).astype(np.uint8)
-            print("✓ Bilinear interpolation completed (fallback)")
+            print("Bilinear interpolation completed (fallback)")
         except:
             pass
     
     # Method 3: Bicubic (following Image 2 formula with R3 kernel)
     try:
         methods['Bicubic'] = interpolate_with_kernel(img_64x64, scale_factor, 3, 4)
-        print("✓ Bicubic interpolation completed (R3 kernel, 4x4 neighborhood)")
+        print("Bicubic interpolation completed (R3 kernel, 4x4 neighborhood)")
     except Exception as e:
-        print(f"✗ Bicubic failed: {e}")
+        print(f"Bicubic failed: {e}")
         # Fallback to scipy
         try:
             methods['Bicubic'] = zoom(img_64x64, zoom=scale_factor, order=3).astype(np.uint8)
-            print("✓ Bicubic interpolation completed (fallback)")
+            print("Bicubic interpolation completed (fallback)")
         except:
             pass
     
     # Method 4: Biquintic (following Image 3 formula with R5 kernel)
     try:
         methods['Biquintic'] = interpolate_with_kernel(img_64x64, scale_factor, 5, 6)
-        print("✓ Biquintic interpolation completed (R5 kernel, 6x6 neighborhood)")
+        print("Biquintic interpolation completed (R5 kernel, 6x6 neighborhood)")
     except Exception as e:
-        print(f"✗ Biquintic failed: {e}")
+        print(f"Biquintic failed: {e}")
         # Fallback to scipy
         try:
             methods['Biquintic'] = zoom(img_64x64, zoom=scale_factor, order=5).astype(np.uint8)
-            print("✓ Biquintic interpolation completed (fallback)")
+            print("Biquintic interpolation completed (fallback)")
         except:
             pass
     
     # Method 5: Biseptic (following Image 4 formula with R7 kernel)
     try:
         methods['Biseptic'] = interpolate_with_kernel(img_64x64, scale_factor, 7, 8)
-        print("✓ Biseptic interpolation completed (R7 kernel, 8x8 neighborhood)")
+        print("Biseptic interpolation completed (R7 kernel, 8x8 neighborhood)")
     except Exception as e:
-        print(f"✗ Biseptic failed: {e}")
+        print(f"Biseptic failed: {e}")
         # Fallback to scipy
         try:
             methods['Biseptic'] = zoom(img_64x64, zoom=scale_factor, order=7).astype(np.uint8)
-            print("✓ Biseptic interpolation completed (fallback)")
+            print("Biseptic interpolation completed (fallback)")
         except:
             pass
     
     # Method 6: Binonic (following Image 5 formula with R9 kernel)
     try:
         methods['Binonic'] = interpolate_with_kernel(img_64x64, scale_factor, 9, 10)
-        print("✓ Binonic interpolation completed (R9 kernel, 10x10 neighborhood)")
+        print("Binonic interpolation completed (R9 kernel, 10x10 neighborhood)")
     except Exception as e:
-        print(f"✗ Binonic failed: {e}")
+        print(f"Binonic failed: {e}")
         # Fallback to scipy
         try:
             methods['Binonic'] = zoom(img_64x64, zoom=scale_factor, order=9).astype(np.uint8)
-            print("✓ Binonic interpolation completed (fallback)")
+            print("Binonic interpolation completed (fallback)")
         except:
             pass
     
