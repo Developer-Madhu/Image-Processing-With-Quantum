@@ -12,7 +12,6 @@ def get_input(prompt):
         except ValueError:
             print("Please enter a valid number.")
 
-
 while True:
     print("\n--- New Interpolation ---")
     x_m1 = get_input("Enter x(-1): ")
