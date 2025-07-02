@@ -105,9 +105,7 @@ def R_kernel(u, order):
         return 0
 
 def interpolate_with_kernel(img, scale_factor, kernel_order, kernel_size):
-    """
-    Custom interpolation using mathematical formulas from the images
-    """
+
     old_height, old_width = img.shape
     new_height = int(old_height * scale_factor)
     new_width = int(old_width * scale_factor)
@@ -207,7 +205,7 @@ def bilinear_interpolation(img, scale_factor):
 def upscale_with_six_methods(img_64x64):
     """
     Upscale 64x64 image to 128x128 using six different interpolation methods
-    following the exact mathematical formulas provided
+    following the exact mathematical formulas
     """
     methods = {}
     scale_factor = 2.0  # 64x64 to 128x128
@@ -415,8 +413,6 @@ def display_comprehensive_comparison():
     """Display images in a clean 3-row layout as requested"""
     # Create figure with proper spacing
     fig, axes = plt.subplots(3, 3, figsize=(18, 15))
-    fig.suptitle('Quantum Image Processing: Interpolation Methods Comparison', 
-                 fontsize=16, fontweight='bold', y=0.95)
     
     methods_list = ['Nearest Neighbor', 'Bilinear', 'Bicubic', 'Biquintic', 'Biseptic', 'Binonic']
     available_methods = [method for method in methods_list if method in upscaled_methods]
